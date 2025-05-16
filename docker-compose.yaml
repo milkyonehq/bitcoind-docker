@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  bitcoind:
+    container_name: bitcoind
+    restart: unless-stopped
+    build:
+      context: .
+    image: 'bitcoind:29.0'
+    environment:
+      DB_CACHE: '8192'
+      MAX_MEM_POOL: '300'
+      MAX_ORPHAN_TX: '100'
+      PRUNE: '0'
+      MAX_CONNECTIONS: '40'
+      MAX_UPLOAD_TARGET: '0'
+      CHAIN: 'main'
+      RPC_ALLOW_IP: '0.0.0.0/0'
+      RPC_BIND: '0.0.0.0'
+      RPC_PASSWORD: 'satoshi'
+      RPC_USER: 'bitcoin'
+      RPC_ENABLED: '1'
+    ports:
+      - '8332:8332'
+      - '8333:8333'
+    volumes:
+      - 'bitcoind-data:/app/data'
+    networks:
+      - bitcoin
+
+volumes:
+  bitcoind-data:
+
+networks:
+  bitcoin:
+    name: 'bitcoin'
